@@ -2,12 +2,17 @@ package io.agile.ppmtool.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Project {
@@ -16,18 +21,27 @@ public class Project {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank(message="Project name is required")
 	private String projectName;
 	
+	@NotBlank(message="Project Identifier is required")
+	@Size(min=4, max=5, message="Identifier's length should be 4-5")
+	@Column(updatable=false, unique=true)
 	private String projectIdentifier;
 	
+	@NotBlank(message="Description is required")
 	private String description;
 	
+	@JsonFormat(pattern="dd-mm-yyyy")
 	private Date startDate;		
 	
+	@JsonFormat(pattern="dd-mm-yyyy")
 	private Date endDate;
 	
+	@JsonFormat(pattern="dd-mm-yyyy")
 	private Date createdAt;
 	
+	@JsonFormat(pattern="dd-mm-yyyy")
 	private Date updatedAt;	
 	
 	public Project() {
