@@ -1,5 +1,7 @@
 package io.agile.ppmtool.web;
 
+
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.agile.ppmtool.domain.Project;
 import io.agile.ppmtool.services.ProjectService;
+import io.agile.ppmtool.services.ValidationErrorService;
 
 @RestController
 @RequestMapping("api/project")
@@ -20,14 +23,18 @@ public class ProjectController {
 
 	@Autowired
 	private ProjectService projectService;
+	
+	@Autowired
+	private ValidationErrorService 	validationErrorService;
 
 	@PostMapping("")
 	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result){
 		
-		if(result.hasErrors()) {
-			return new ResponseEntity<String>("Invalid Project Object",	HttpStatus.BAD_REQUEST);
+		ResponseEntity<?> errorMap=validationErrorService.mapValidationService(result);
+		if(errorMap!=null) {
+			return errorMap;
 		}
-		Project project1=projectService.saveOrUpdateProject(project);
+		Project project1=projectService.saveOrUpdateProject(project);	
 		return new ResponseEntity<Project>(project1,HttpStatus.CREATED);
 	}
 }
