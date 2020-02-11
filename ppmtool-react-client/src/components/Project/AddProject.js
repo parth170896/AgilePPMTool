@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { createProject } from "../../actions/ProjectActions";
 
 class AddProject extends Component {
   constructor() {
@@ -10,12 +13,21 @@ class AddProject extends Component {
       projectIdentifier: "",
       description: "",
       startDate: "",
-      endDate: ""
+      endDate: "",
+      errors: {}
     };
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+
+  //life cycle hooks
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
     const newProject = {
@@ -25,7 +37,7 @@ class AddProject extends Component {
       startDate: this.state.startDate,
       endDate: this.state.endDate
     };
-    console.log(newProject);
+    this.props.createProject(newProject, this.props.history);
   }
   render() {
     return (
@@ -45,6 +57,7 @@ class AddProject extends Component {
                     value={this.state.projectName}
                     onChange={this.onChange}
                   />
+                  <h5>{this.state.errors.projectName}</h5>
                 </div>
                 <div className="form-group">
                   <input
@@ -55,6 +68,7 @@ class AddProject extends Component {
                     value={this.state.projectIdentifier}
                     onChange={this.onChange}
                   />
+                  <h5>{this.state.errors.projectIdentifier}</h5>
                 </div>
                 <div className="form-group">
                   <textarea
@@ -64,6 +78,7 @@ class AddProject extends Component {
                     value={this.state.description}
                     onChange={this.onChange}
                   ></textarea>
+                  <h5>{this.state.errors.description}</h5>
                 </div>
                 <h6>Start Date</h6>
                 <div className="form-group">
@@ -99,4 +114,13 @@ class AddProject extends Component {
   }
 }
 
-export default AddProject;
+AddProject.prototypes = {
+  createProject: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { createProject })(AddProject);
