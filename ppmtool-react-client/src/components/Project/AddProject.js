@@ -40,6 +40,7 @@ class AddProject extends Component {
     this.props.createProject(newProject, this.props.history);
   }
   render() {
+    const { errors } = this.state;
     return (
       <div className="project">
         <div className="container">
@@ -51,13 +52,13 @@ class AddProject extends Component {
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg "
+                    className="form-control form-control-lg"
                     placeholder="Project Name"
                     name="projectName"
                     value={this.state.projectName}
                     onChange={this.onChange}
                   />
-                  <h5>{this.state.errors.projectName}</h5>
+                  {errors.projectName}
                 </div>
                 <div className="form-group">
                   <input
@@ -78,7 +79,7 @@ class AddProject extends Component {
                     value={this.state.description}
                     onChange={this.onChange}
                   ></textarea>
-                  <h5>{this.state.errors.description}</h5>
+                  <h5>{errors.description}</h5>
                 </div>
                 <h6>Start Date</h6>
                 <div className="form-group">
