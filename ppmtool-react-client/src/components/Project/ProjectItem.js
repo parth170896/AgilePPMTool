@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ProjectReducer from "../../reducers/ProjectReducer";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 class ProjectItem extends Component {
   render() {
@@ -23,11 +24,11 @@ class ProjectItem extends Component {
                     <i class="fa fa-flag-checkered pr-1"> Project Board </i>
                   </li>
                 </a>
-                <a href="#">
+                <Link to={`/updateProject/${project.projectIdentifier}`}>
                   <li class="list-group-item update">
                     <i class="fa fa-edit pr-1"> Update Project Info</i>
                   </li>
-                </a>
+                </Link>
                 <a href="">
                   <li class="list-group-item delete">
                     <i class="fa fa-minus-circle pr-1"> Delete Project</i>
