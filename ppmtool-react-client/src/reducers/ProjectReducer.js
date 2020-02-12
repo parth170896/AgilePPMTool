@@ -1,4 +1,4 @@
-import { GET_PROJECTS } from "../actions/Types";
+import { GET_PROJECTS, GET_PROJECT } from "../actions/Types";
 
 const initialState = {
   projects: [],
@@ -12,7 +12,11 @@ export default function(state = initialState, action) {
         ...state,
         projects: action.payload
       };
-
+    case GET_PROJECT:
+      return {
+        ...state,
+        project: action.payload
+      };
     default:
       return state;
   }
