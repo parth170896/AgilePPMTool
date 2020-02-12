@@ -115,7 +115,7 @@ class AddProject extends Component {
   }
 }
 
-AddProject.prototypes = {
+AddProject.propTypes = {
   createProject: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };

@@ -1,17 +1,20 @@
 import React, { Component } from "react";
+import ProjectReducer from "../../reducers/ProjectReducer";
+import PropTypes from "prop-types";
 
 class ProjectItem extends Component {
   render() {
+    const project = this.props.project;
     return (
       <div class="container">
         <div class="card card-body bg-light mb-3">
           <div class="row">
             <div class="col-2">
-              <span class="mx-auto">REACT</span>
+              <span class="mx-auto">{project.projectIdentifier}</span>
             </div>
             <div class="col-lg-6 col-md-4 col-8">
-              <h3>Spring / React Project</h3>
-              <p>Project to create a Kanban Board with Spring Boot and React</p>
+              <h3>{project.projectName}</h3>
+              <p>{project.description}</p>
             </div>
             <div class="col-md-4 d-none d-lg-block">
               <ul class="list-group">
@@ -38,5 +41,7 @@ class ProjectItem extends Component {
     );
   }
 }
-
+ProjectReducer.propTypes = {
+  project: PropTypes.object.isRequired
+};
 export default ProjectItem;
