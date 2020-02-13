@@ -12,12 +12,16 @@ class UpdateProject extends Component {
       projectIdentifier: "",
       description: "",
       startDate: "",
-      endDate: ""
+      endDate: "",
+      errors: ""
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
     const {
       id,
       projectName,
@@ -73,6 +77,9 @@ class UpdateProject extends Component {
                     value={this.state.projectName}
                     onChange={this.onChange}
                   />
+                  <div className="is-inValid">
+                    {this.state.errors.projectName}
+                  </div>
                 </div>
                 <div className="form-group">
                   <input
@@ -83,6 +90,7 @@ class UpdateProject extends Component {
                     value={this.state.projectIdentifier}
                     disabled
                   />
+                  {this.state.errors.projectIdentifier}
                 </div>
                 <div className="form-group">
                   <textarea
@@ -92,6 +100,7 @@ class UpdateProject extends Component {
                     value={this.state.description}
                     onChange={this.onChange}
                   />
+                  {this.state.errors.description}
                 </div>
                 <h6>Start Date</h6>
                 <div className="form-group">
@@ -130,11 +139,13 @@ class UpdateProject extends Component {
 UpdateProject.propTypes = {
   getProject: PropTypes.func.isRequired,
   project: PropTypes.object.isRequired,
-  createProject: PropTypes.func.isRequired
+  createProject: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  project: state.projects.project
+  project: state.projects.project,
+  errors: state.errors
 });
 
 export default connect(mapStateToProps, { getProject, createProject })(
