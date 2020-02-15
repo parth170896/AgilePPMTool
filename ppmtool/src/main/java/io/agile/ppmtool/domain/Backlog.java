@@ -1,9 +1,12 @@
 package io.agile.ppmtool.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Backlog {
@@ -17,6 +20,9 @@ public class Backlog {
 	private String projectIdentifier;
 	
 	//One To One mapping with Project Table
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="projectId", nullable=false)
+	private Project project;	
 	
 	//One To Many mapping with ProjectTask Table
 	
