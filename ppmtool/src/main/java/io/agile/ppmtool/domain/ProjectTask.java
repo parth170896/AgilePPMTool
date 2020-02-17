@@ -2,14 +2,20 @@ package io.agile.ppmtool.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class ProjectTask {
@@ -40,7 +46,27 @@ public class ProjectTask {
 	private String projectIdentifier;
 	
 	//Many To One Mapping with Backlog
+	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER)
+	@JoinColumn(name="backlogId", updatable=false, nullable=false)
+	@JsonIgnore
+	private Backlog backlog;
 	
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Backlog getBacklog() {
+		return backlog;
+	}
+
+	public void setBacklog(Backlog backlog) {
+		this.backlog = backlog;
+	}
+
 	public ProjectTask() {
 		
 	}
@@ -107,14 +133,6 @@ public class ProjectTask {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	public Date getUpdateAt() {
-		return updatedAt;
-	}
-
-	public void setUpdateAt(Date updateAt) {
-		this.updatedAt = updateAt;
 	}
 
 	public String getProjectIdentifier() {
