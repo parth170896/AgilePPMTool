@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ import io.agile.ppmtool.domain.ProjectTask;
 import io.agile.ppmtool.services.ProjectTaskService;
 import io.agile.ppmtool.services.ValidationErrorService;
 
-@RestController
+@RestController	
 @CrossOrigin
 @RequestMapping("/api/backlog")
 public class BacklogController {
@@ -53,5 +54,11 @@ public class BacklogController {
 	public ResponseEntity<?> getProjectTask(@PathVariable String projectIdentifier, @PathVariable String projectSequence){
 		ProjectTask tempProjectTask=projectTaskService.findProjectSequenceById(projectIdentifier, projectSequence);                                                    
 		return new ResponseEntity<ProjectTask>(tempProjectTask,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{projectIdentifier}/{projectSequence}")
+	public ResponseEntity<?> deleteProjectTask(@PathVariable String projectIdentifier, @PathVariable String projectSequence){
+		projectTaskService.deletebyProjectSequence(projectIdentifier, projectSequence);
+		return new ResponseEntity<String>("project Task is deleted: "+projectSequence,HttpStatus.OK);
 	}
 }

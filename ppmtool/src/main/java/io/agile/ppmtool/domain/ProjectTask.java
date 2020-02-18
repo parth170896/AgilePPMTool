@@ -2,7 +2,6 @@ package io.agile.ppmtool.domain;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +45,7 @@ public class ProjectTask {
 	private String projectIdentifier;
 	
 	//Many To One Mapping with Backlog
-	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="backlogId", updatable=false, nullable=false)
 	@JsonIgnore
 	private Backlog backlog;

@@ -29,22 +29,23 @@ public class ProjectTaskService {
 		//Set Initial Priority when priority is null
 		//Set initial Status
 		try {
-			Backlog backlog=backlogRepository.findByProjectIdentifier(projectIdentifier);
-			projectTask.setBacklog(backlog);
-			Integer PTSequence=backlog.getPTSequence();
-			PTSequence++;
-			backlog.setPTSequence(PTSequence);
-			projectTask.setProjectSequence(projectIdentifier+"-"+PTSequence);
-			projectTask.setProjectIdentifier(projectIdentifier);
-			
-			if(projectTask.getStatus()==null || projectTask.getStatus()=="") {
-				projectTask.setStatus("TO_DO");
-			}
+			if(projectTask.getId()==null || projectTask.getId()==0) {
+				Backlog backlog=backlogRepository.findByProjectIdentifier(projectIdentifier);
+				projectTask.setBacklog(backlog);
+				Integer PTSequence=backlog.getPTSequence();
+				PTSequence++;
+				backlog.setPTSequence(PTSequence);
+				projectTask.setProjectSequence(projectIdentifier+"-"+PTSequence);
+				projectTask.setProjectIdentifier(projectIdentifier);
+				
+				if(projectTask.getStatus()==null || projectTask.getStatus()=="") {
+					projectTask.setStatus("TO_DO");
+				}
 
-			if(projectTask.getPriority()==null || projectTask.getPriority()==0) {
-				projectTask.setPriority(3);
+				if(projectTask.getPriority()==null || projectTask.getPriority()==0) {
+					projectTask.setPriority(3);
+				}
 			}
-			
 			return projectTaskRepository.save(projectTask);	
 		}
 		catch(Exception exc) {
@@ -70,4 +71,11 @@ public class ProjectTaskService {
 			}
 			return projectTask;
 	}
+
+	public void deletebyProjectSequence(String projectIdentifier, String projectSequence) {
+		ProjectTask projectTask=findProjectSequenceById(projectIdentifier, projectSequence);
+
+		projectTaskRepository.delete(projectTask);
+	}
+	
 }
