@@ -6,13 +6,13 @@ import PropTypes from "prop-types";
 import { getBacklog } from "../../actions/BacklogActions";
 
 class ProjectBoard extends Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
     const { id } = this.props.match.params;
     this.props.getBacklog(id);
   }
   render() {
     const { id } = this.props.match.params;
+    const { projectTasks } = this.props.backlog;
     return (
       <div className="container">
         <Link to={`/addProjectTask/${id}`} className="btn btn-primary mb-3">
@@ -20,7 +20,7 @@ class ProjectBoard extends Component {
         </Link>
         <br />
         <hr />
-        <Backlog />
+        <Backlog projectTasks={projectTasks} />
       </div>
     );
   }
@@ -35,4 +35,4 @@ const mapStateToProps = state => ({
   backlog: state.backlog
 });
 
-export default connect(null, { getBacklog })(ProjectBoard);
+export default connect(mapStateToProps, { getBacklog })(ProjectBoard);
