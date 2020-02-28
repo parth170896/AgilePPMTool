@@ -21,6 +21,11 @@ class AddProjectTask extends Component {
       errors: {}
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -38,30 +43,36 @@ class AddProjectTask extends Component {
   }
   render() {
     const { id } = this.props.match.params;
+    const { errors } = this.state;
     return (
-      <div class="add-PBI">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 m-auto">
-              <Link to={`/projectBoard/${id}`} class="btn btn-light">
+      <div className="add-PBI">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <Link to={`/projectBoard/${id}`} className="btn btn-light">
                 Back to Project Board
               </Link>
-              <h4 class="display-4 text-center">Add Project Task</h4>
-              <p class="lead text-center">Project Name + Project Code</p>
+              <h4 className="display-4 text-center">Add Project Task</h4>
+              <p className="lead text-center">Project Name + Project Code</p>
               <form onSubmit={this.onSubmit}>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="text"
-                    class="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.summary
+                    })}
                     name="summary"
                     placeholder="Project Task summary"
                     value={this.state.summary}
                     onChange={this.onChange}
                   />
+                  {errors.summary && (
+                    <div className="invalid-feedback">{errors.summary}</div>
+                  )}
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <textarea
-                    class="form-control form-control-lg"
+                    className="form-control form-control-lg"
                     placeholder="Acceptance Criteria"
                     name="acceptanceCriteria"
                     value={this.state.acceptanceCriteria}
@@ -69,18 +80,18 @@ class AddProjectTask extends Component {
                   ></textarea>
                 </div>
                 <h6>Due Date</h6>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     type="date"
-                    class="form-control form-control-lg"
+                    className="form-control form-control-lg"
                     name="dueDate"
                     value={this.state.dueDate}
                     onChange={this.onChange}
                   />
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <select
-                    class="form-control form-control-lg"
+                    className="form-control form-control-lg"
                     name="priority"
                     onChange={this.onChange}
                   >
@@ -91,9 +102,9 @@ class AddProjectTask extends Component {
                   </select>
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                   <select
-                    class="form-control form-control-lg"
+                    className="form-control form-control-lg"
                     name="status"
                     value={this.state.status}
                     onChange={this.onChange}
@@ -105,7 +116,10 @@ class AddProjectTask extends Component {
                   </select>
                 </div>
 
-                <input type="submit" class="btn btn-primary btn-block mt-4" />
+                <input
+                  type="submit"
+                  className="btn btn-primary btn-block mt-4"
+                />
               </form>
             </div>
           </div>
@@ -116,7 +130,12 @@ class AddProjectTask extends Component {
 }
 
 AddProjectTask.propTypes = {
-  addProjectTask: PropTypes.func.isRequired
+  addProjectTask: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
-export default connect(null, { addProjectTask })(AddProjectTask);
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { addProjectTask })(AddProjectTask);
