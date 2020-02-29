@@ -28,5 +28,10 @@ export const getBacklog = projectIdentifier => async dispatch => {
       type: GET_BACKLOG,
       payload: res.data
     });
-  } catch (exc) {}
+  } catch (exc) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: exc.response.data
+    });
+  }
 };
