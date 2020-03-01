@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import {
+  getProjectTask,
+  addProjectTask
+} from "../../../actions/BacklogActions";
 
 class UpdateProjectTask extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: "",
       summary: "",
       acceptanceCriteria: "",
       dueDate: "",
@@ -15,10 +22,49 @@ class UpdateProjectTask extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
+  componentDidMount() {
+    const { projectId } = this.props.match.params;
+    const { taskId } = this.props.match.params;
+    this.props.getProjectTask(projectId, taskId);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+    const {
+      id,
+      summary,
+      acceptanceCriteria,
+      dueDate,
+      priority,
+      status
+    } = nextProps.projectTask;
+
+    this.setState({
+      id,
+      summary,
+      acceptanceCriteria,
+      dueDate,
+      priority,
+      status
+    });
+  }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  onSubmit(e) {}
+  onSubmit(e) {
+    e.preventDefault();
+    const { projectId } = this.props.match.params;
+    const newProjectTask = {
+      id: this.state.id,
+      summary: this.state.summary,
+      acceptanceCriteria: this.state.acceptanceCriteria,
+      dueDate: this.state.dueDate,
+      priority: this.state.priority,
+      status: this.state.status
+    };
+    this.props.addProjectTask(projectId, newProjectTask, this.props.history);
+  }
   render() {
     const { projectId } = this.props.match.params;
     return (
@@ -38,6 +84,8 @@ class UpdateProjectTask extends Component {
                     className="form-control form-control-lg"
                     name="summary"
                     placeholder="Project Task summary"
+                    value={this.state.summary}
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -45,6 +93,8 @@ class UpdateProjectTask extends Component {
                     className="form-control form-control-lg"
                     placeholder="Acceptance Criteria"
                     name="acceptanceCriteria"
+                    value={this.state.acceptanceCriteria}
+                    onChange={this.onChange}
                   ></textarea>
                 </div>
                 <h6>Due Date</h6>
@@ -53,12 +103,16 @@ class UpdateProjectTask extends Component {
                     type="date"
                     className="form-control form-control-lg"
                     name="dueDate"
+                    value={this.state.dueDate}
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
                   <select
                     className="form-control form-control-lg"
                     name="priority"
+                    value={this.state.priority}
+                    onChange={this.onChange}
                   >
                     <option value={0}>Select Priority</option>
                     <option value={1}>High</option>
@@ -71,6 +125,8 @@ class UpdateProjectTask extends Component {
                   <select
                     className="form-control form-control-lg"
                     name="status"
+                    value={this.state.status}
+                    onChange={this.onChange}
                   >
                     <option value="">Select Status</option>
                     <option value="TO_DO">TO DO</option>
@@ -91,4 +147,15 @@ class UpdateProjectTask extends Component {
     );
   }
 }
-export default UpdateProjectTask;
+UpdateProjectTask.propTypes = {
+  getProjectTask: PropTypes.func.isRequired,
+  projectTask: PropTypes.object.isRequired,
+  addProjectTask: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  projectTask: state.backlog.projectTask
+});
+export default connect(mapStateToProps, { getProjectTask, addProjectTask })(
+  UpdateProjectTask
+);
