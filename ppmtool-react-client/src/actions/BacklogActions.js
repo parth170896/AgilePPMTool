@@ -38,7 +38,8 @@ export const getBacklog = projectIdentifier => async dispatch => {
 
 export const getProjectTask = (
   projectIdentifier,
-  projectTaskId
+  projectTaskId,
+  history
 ) => async dispatch => {
   try {
     const res = await axios.get(
@@ -49,10 +50,7 @@ export const getProjectTask = (
       payload: res.data
     });
   } catch (exc) {
-    dispatch({
-      type: GET_ERRORS,
-      payload: exc.response.data
-    });
+    history.push(`/projectBoard/${projectIdentifier}`);
   }
 };
 
