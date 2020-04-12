@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 			.headers().frameOptions().sameOrigin()
 			.and()
-			.authorizeRequests()
+			.authorizeRequests().antMatchers("/api/users/**").permitAll()
 			.anyRequest().authenticated();
 	}
 	
